@@ -18,9 +18,10 @@
 #10.Inspect the content of vectors and manipulate their content.
 #11.Subset and extract values from vectors.
 #12.Correctly define and handle missing values in vectors.
-#13.Use the built-in RStudio help interface
-#14.Interpret the R help documentation
-#15.Provide sufficient information for troubleshooting with the R user community.
+#13.wide and long format data
+#14.Use the built-in RStudio help interface
+#15.Interpret the R help documentation
+#16.Provide sufficient information for troubleshooting with the R user community.
 #--------------------------------------------------------
 
 # R & RStudio & RCommander
@@ -87,7 +88,7 @@ sleep  # view data
 # - cholest.dta
 # - cholest.xlsx
 # Always make sure that you set the working directory first!
-data.csv = read.csv("healthstatus.sav")  # most natural way to open data in R
+data.csv = read.csv("healthstatus.csv")  # most natural way to open data in R
 library(foreign)  # library to read .sav (SPSS) and .dta (STATA) files
 data.sav = read.spss("healthstatus.sav", to.data.frame = TRUE)  #SPSS
 data.dta = read.dta("cholest.dta")  # STATA
@@ -178,32 +179,29 @@ ppka_data <- merge(mph_data, drph_data, by="id")
 ppka_datas <- merge(mph_data, drph_data, by="id", "gender", "age")
 
 #long format and wideformat
-long.format <- reshape(wide.format, 
+datawideformat = read.spss("wideformat.sav", to.data.frame = TRUE)  #SPSS
+install.packages("reshape")
+datalongformat <- reshape(datawideformat, 
                        # variable names for level one
-                       varying=c("income2008", "income2009", "income2010"),
+                       varying=c("day1", "day2", "day3","day4"),
                        # new var name for long data
-                       v.names="income",
+                       v.names="rbs",
                        # name for year in long data
-                       timevar="year", 
+                       timevar="day", 
                        # possible time values
-                       times=c(2008, 2009, 2010), 
+                       times=c(1, 2, 3, 4), 
                        # unit-year observations
                        new.row.names=1:1000,
                        # direction to reshape
-                       direction="long"
-)
+                       direction="long")
 
-wide.format <- reshape(long.format,
-                       # time variable
-                       timevar="year",
-                       # variables not to change
-                       idvar="idvar", 
-                       # unit-year observations
-                       new.row.names=1:1000,
-                       # direction of reshape
-                       direction = "wide"
-)
-
+install.packages("tidyr")
+library(tidyr)
+wide_data <- datalongformat %>%
+  pivot_wider(
+    names_from = day,      # Column whose unique values become new column names
+    values_from = rbs # Column whose values populate the new columns
+  )
 
 
 # Write to .csv
@@ -212,4 +210,5 @@ write.csv(new.data, "newdata.csv")
 write.dta(new.data, "c:/newdata.dta")
 # SPSS
 write.foreign(new.data, "c:/newdata.txt", "c:/mydata.sps",   package="SPSS")
+
 # Q&A?
