@@ -124,13 +124,16 @@ View(data.sav)  # View, graphical way
 # creating - c(), rep(), seq(), numeric()
 # saving - save(), load()
 # converting - as.numeric(), as.character(), as.factor(), as.logical()
-# combinging c(), paste(), cbind(), rbind(), merge()
+# combining c(), paste(), cbind(), rbind(), merge()
 
 #creating variables
 id <- c(1,2,3,4)
-gender <- c("M","F","M","F")
+gender <- c("1","2","1","2")
 age <- c(35,36,37,36)
 mph_data <- data.frame(id = id, Age = age, Gender = gender)
+mph_data$gender <- factor(mph_data$gender,
+                             levels = c(1, 2), # Original values in your data
+                             labels = c("Male", "Female")) # Desired labels
 values <- c(70,78,71,72)
 mph_data$mark <- values
 
@@ -203,6 +206,8 @@ wide_data <- datalongformat %>%
     values_from = rbs # Column whose values populate the new columns
   )
 
+#data entry using rstudio is not practical
+#use excel or spss 
 
 # Write to .csv
 write.csv(new.data, "newdata.csv")
