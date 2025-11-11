@@ -1,5 +1,5 @@
 #--------------------------------------------------------
-# Biostatistic practical using R Software week 10 compare prroportion (2025)
+# Biostatistic practical using R Software week 9 compare prroportion (2025)
 #--------------------------------------------------------
 # Muhammad Adil ZA
 #--------------------------------------------------------
