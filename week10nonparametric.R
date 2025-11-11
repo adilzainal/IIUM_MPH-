@@ -5,7 +5,7 @@
 #--------------------------------------------------------
 # Bivariate data analysis continued
 #--------------------------------------------------------
-#Non parametric test (mann whitney, kruskall wallis, wilcoxon, spearman, friedman)
+#Non parametric test (mann whitney, kruskall wallis, wilcoxon, friedman)
 
 
 #mann whitney u test (non parametric for independent t-test)
@@ -58,30 +58,6 @@ ggboxplot(data.sav, x = "exercise", y = "sbp",
 summary(data.sav$BMI)
 summary(data.sav$BMI2)
 wilcox.test(data.sav$BMI, data.sav$BMI2, paired=TRUE) 
-
-#correlation 
-plot(data.sav$wt, data.sav$hcy, main="Scatterplot Example", 
-     xlab="Weight ", ylab="Hcy ", pch=20)
-
-plot(data.sav$sbp, data.sav$dbp, main="Scatterplot new", 
-     xlab="Systolic ", ylab="Diastolic ", pch=20)
-
-# Simple Scatterplot
-plot(data.sav$sbp, data.sav$dbp, main="Scatterplot Example", 
-     xlab="SBP ", ylab="DBP ", pch=19)
-
-# Add fit lines
-abline(lm(data.sav$hcy~data.sav$wt), col="red") # regression line (y~x) 
-lines(lowess(data.sav$wt,data.sav$ht), col="blue") # lowess line (x,y)
-
-
-library(Hmisc)
-cor.test(data.sav$hcy, data.sav$wt, method=c("pearson")) #normally distributed data
-cor.test(data.sav$hcy, data.sav$wt, method=c("spearman")) #non-normally distributed data
-cor.test(data.sav$sbp, data.sav$dbp, method=c("pearson")) #normally distributed data
-
-#r <0.3 very weak, 0.3-0.5< is weak, 0.5-0.7 is moderate, >0.7 is strong
-#interpret correlation coefficent = 1.-value 2.direction 3.p-value
 
 #friedman test 
 library(tidyverse)
