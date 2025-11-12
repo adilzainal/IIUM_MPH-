@@ -1,5 +1,5 @@
 #--------------------------------------------------------
-# Biostatistic practical using R Software, Week 5 Intro to R (2025)
+# Biostatistic practical using R Software, Week 5 MPH Intro to R (2025)
 #--------------------------------------------------------
 # Muhammad Adil ZA 
 #--------------------------------------------------------
