@@ -353,7 +353,7 @@ summary(D3(lr_mi, lr_mi2))
 
 tbl_regression(lr_mi2)
 
-
+# references : https://bookdown.org/drki_musa/dataanalysis/
 
 
 
