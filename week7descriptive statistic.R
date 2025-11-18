@@ -16,40 +16,54 @@ missmap(data.sav, main = "Missing values vs observed")
 #You can add the argument na.rm=TRUE to calculate the result while ignoring the missing values.
 
 #Explore dataset
-data.sav = read.spss("healthstatus.sav", to.data.frame = TRUE)
+healthstatus = read.spss("healthstatus.sav", to.data.frame = TRUE)
 summary(data.sav)
 summary(data.sav$age)
+attach(healthstatus)
+summary(age)
+summary(wt)
 attach(data.sav)
 sapply(data.sav, mean, na.rm=TRUE) #Exclude missing value
 summary(data.sav$age) # non-normal
 fivenum(data.sav$age) # Tukey min,lower-hinge, median,upper-hinge,max
-sd(data.sav$age)
+sd(data.sav$age)x
 sd(age)
+round(sd(age), digits = 1)
 IQR(data.sav$age)
 IQR(age)
 range(age)
 var(data.sav$age)
+round(var(age),digits = 1)
 attach(data.sav)
 install.packages("pastecs")
 library(pastecs)
 stat.desc(data.sav$age) #for normal data
-stat.desc(age)
-#crosstabulate for continous data
+round(stat.desc(data.sav), digits =1)
+#crosstabulate for continuous data
 library(psych)
 describe(data.sav$age)
 describeBy(data.sav$age, data.sav$sex)
-describeBy(sbp,sex)
+describeBy(age,exercise)
 
-#Table
+data.sav %>%
+  group_by(smoking, sex) %>%
+  summarise(
+    mean_continuous = mean(age, na.rm = TRUE),
+    sd_continuous = sd(age, na.rm = TRUE),)
+
+#Ttbl_strata2()#Table
 # 2-Way Frequency Table 
 attach(data.sav)
 summary(data.sav$sex)
 tblsex <- table(sex)
 t1 <- prop.table(tblsex)
 round(t1, digits = 2) #Round to 2 decimal point
-summary(BMIc)
-tbmic <- table(BMIc)
+round(prop.table(table(sex)), digits=2)
+summary(BMICat)
+tbmic <- table(BMICat)
 prop.table(tbmic)
+summary(smoking)
+round(prop.table(table(smoking)), digits=2)
 
 tblbmi <- table(data.sav$BMIc)
 t2 <- prop.table(tblbmi)
@@ -64,10 +78,10 @@ prop.table(mytable, 1) # 1 for row, 2 for column percentages
 #In APA format should be column percentages, percentage of factor according to outcome
 tblsxhpt <- table(data.sav$sex, data.sav$hpt)
 tblsxhpt
-t1 <- prop.table(tblsxhpt, 1)
+t1 <- prop.table(tblsxhpt, 2)
 round(t1, digits = 2) #Round to 2 decimal point
 
-mytable <- table(data.sav$exercise, data.sav$sex) # A will be rows, B will be columns 
+mytable <- table(exercise, sex) # A will be rows, B will be columns 
 mytable # print table 
 
 summary(data.sav$exercise)
@@ -87,7 +101,8 @@ mytable3 <- table(data.sav$sex, data.sav$exercise, data.sav$smoking)
 mytable3
 mytable3 <- table(sex, exercise, smoking) 
 ftable(mytable3)
-prop.table(mytable3, 2)
+tbl3 <- prop.table(mytable3, 2)
+round(tbl3, digits = 2) 
 
 #normality check for a continuous variable can be determine using statistically and graphically
 #statistically
@@ -95,6 +110,7 @@ shapiro.test(age) # null hypothesis, no difference between age distribution and 
                   # alternate hypotheses, there is diff btw age and normal.dist
                   # p value, if p value < 0.05, reject null hypothesis, alternate hypothesis , your distribution not normal
                   # p value > 0.05, do not reject null, null hypothesis, your distribution is normal 
+ks.test(data.sav$age, "pnorm") # kolmogorov smirnov test 
 describe(data.sav$age) #The acceptable range for skewness or kurtosis below +1.5 and above -1.5 (Tabachnick & Fidell, 2013)
 #graphically
 #Histogram
@@ -102,11 +118,11 @@ hist(data.sav$age)
 hist(age)
 hist(wt)
 hist(ht)
-hist(data.sav$age,
+hist(age,
      main="Age of patient",
      xlab="Age in years",
-     xlim=c(10,80),
-     col="darkmagenta",
+     xlim=c(0,80),
+     col="orange",
      freq=FALSE)
 hist()
 install.packages("moments")
@@ -182,7 +198,7 @@ boxplot(age~sex,
         data=data.sav, 
         main="Age of respondent", 
         xlab="Gender",
-        ylab="Age",
+        ylab="Age in years",
         col=c("blue", "green"))
 
 boxplot(age,data=data.sav, main="Age of respondent", 
@@ -215,7 +231,7 @@ ggplot(datas, aes(x=sex, y=age, colour=exercise)) +
 datasa <- summarySE(data.sav, measurevar="age", groupvars=c("sex"))
 datasa
 ggplot(datasa, aes(x=sex, y=age)) + 
-  geom_errorbar(aes(ymin=age-ci, ymax=age+ci), width=.1) +
+  geom_errorbar(aes(ymin=age-sd, ymax=age+sd), width=.1) +
   geom_line() +
   geom_point()
 pd <- position_dodge(0.1)
